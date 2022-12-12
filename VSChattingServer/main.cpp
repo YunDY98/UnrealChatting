@@ -3,7 +3,10 @@
 #include <WinSock2.h>
 #include <iostream>
 #include <string>
-#include <thread>
+
+#include <windows.h>
+#include <process.h>
+
 //
 #include "jdbc/mysql_connection.h"
 #include "jdbc/cppconn/driver.h"
@@ -22,8 +25,39 @@ using namespace std;
 const string server = "tcp://127.0.0.1:3306";
 const string username = "root";
 const string password = "1234";
-
-
+//unsigned WINAPI WorkThread(void* Args)
+//{
+//    SOCKET CS = *(SOCKET*)Args;
+//    while (true)
+//    {
+//        char Buffer[1024] = { 0, };
+//
+//        int RecvBytes = recv(CS, Buffer, sizeof(Buffer) - 1, 0);
+//        if (RecvBytes <= 0)
+//        {
+//            closesocket(CS);
+//            EnterCriticalSection(&ServerCS);
+//            vSocketList.erase(find(vSocketList.begin(), vSocketList.end(), CS));
+//            LeaveCriticalSection(&ServerCS);
+//            break;
+//        }
+//        cout << Buffer << '\n';
+//
+//        for (int i = 0; i < vSocketList.size(); i++)
+//        {
+//            int SendBytes = send(vSocketList[i], Buffer, strlen(Buffer) + 1, 0);
+//            if (SendBytes <= 0)
+//            {
+//                closesocket(CS);
+//                EnterCriticalSection(&ServerCS);
+//                vSocketList.erase(find(vSocketList.begin(), vSocketList.end(), CS));
+//                LeaveCriticalSection(&ServerCS);
+//                break;
+//            }
+//        }
+//    }
+//    return 0;
+//}
 // cpp -> 언리얼 
 std::string MultiByteToUtf8(std::string multibyte_str)
 {
@@ -66,7 +100,6 @@ std::string MultiByteToUtf8(std::string multibyte_str)
 
     return resultString;
 }
-
 
 // 언리얼 -> cpp
 std::string Utf8ToMultiByte(std::string utf8_str)
@@ -180,6 +213,7 @@ int main(int argc, char* argv[])
         UserName[PACKET_SIZE - 1] = '\0';
         Buffer[PACKET_SIZE - 1] = '\0';
         // 수신 메시지 string 변환
+
         string strCONTENTS = Utf8ToMultiByte(Buffer);
         string strUserName = Utf8ToMultiByte(UserName);
 
@@ -196,7 +230,7 @@ int main(int argc, char* argv[])
         pstmt->setString(2, MultiByteToUtf8(strUserName));
         pstmt->execute();
 
-        cout << "수신 메시지 : " << strCONTENTS << endl;
+        cout << strUserName << "수신 메시지 : " << strCONTENTS << endl;
 
         int SendBytes = send(ClientSocket, Buffer, sizeof(Buffer), 0);
         cout << "SendBytes :" << SendBytes << endl;
