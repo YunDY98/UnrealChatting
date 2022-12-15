@@ -21,5 +21,8 @@
     <ClCompile Include="thread.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="login.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

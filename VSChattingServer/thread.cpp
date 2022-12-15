@@ -119,46 +119,64 @@
 //
 //    char SendBuffer[PACKET_SIZE] = { 0, };
 //    char RecvBuffer[PACKET_SIZE] = { 0, };
+//    char RecvNameBuffer[PACKET_SIZE] = { 0, };
+//
 //    int RecvBytes = 0;
 //    int SendBytes = 0;
+//    int RecvUserName = 0;
 //    SOCKET LogoutSocket;
 //    while (true)
 //    {
 //        RecvBytes = recv(ClientSocket, RecvBuffer, sizeof(RecvBuffer), 0);
+//        int RecvUserName = recv(ClientSocket, RecvNameBuffer, sizeof(RecvNameBuffer), 0);
+//   
 //        if (RecvBytes <= 0)
 //        {
 //            LogoutSocket = ClientSocket;
 //            //string msg = format("SocketID : [%d]가 로그아웃했습니다!", ClientSocket);
 //            //msg = MultiByteToUtf8(msg);
 //            //memcpy(SendBuffer, msg.c_str(), msg.length());
-//            EnterCriticalSection(&ServerCS);
-//            for (int i = 0; i < userlist.size(); ++i)
-//            {
-//                if (userlist[i] != ClientSocket)
-//                {
-//                    const char SendLogout[PACKET_SIZE] = { "another players logout." };
-//                    SendBytes = send(userlist[i], SendLogout, sizeof(SendLogout), 0);
-//                    cout << SendLogout << " : " << LogoutSocket << " TO : " << userlist[i] << endl;
-//                }
-//            }
-//            LeaveCriticalSection(&ServerCS);
+//            // 
+//            //EnterCriticalSection(&ServerCS);
+//            //for (int i = 0; i < userlist.size(); ++i)
+//            //{
+//            //    if (userlist[i] != ClientSocket)
+//            //    {
+//            //        const char SendLogout[PACKET_SIZE] = { "another players logout." };
+//            //        SendBytes = send(userlist[i], SendLogout, sizeof(SendLogout), 0);
+//            //        cout << SendLogout << " : " << LogoutSocket << " TO : " << userlist[i] << endl;
+//            //    }
+//            //}
+//            //LeaveCriticalSection(&ServerCS);
 //            break;
 //        }
 //        RecvBuffer[PACKET_SIZE - 1] = '\0';
+//
 //        // 수신 메시지 string 변환
 //        string strCONTENTS = RecvBuffer;
+//
+//        string UserName = RecvNameBuffer;
+//
+//
 //        if (strCONTENTS == "EXITSERVER")
 //        {
 //            // 수신 메시지 EXITSERVER 일때 종료
 //            bProgramRunning = false;
 //            break;
 //        }
-//        pstmt = con->prepareStatement("insert into chat (chat) values(?)");
+//        pstmt = con->prepareStatement("insert into chat (chat,username) values(?,?)");
 //        pstmt->setString(1, strCONTENTS);
+//        pstmt->setString(2, UserName);
 //        pstmt->execute();
+//
+//        int SendBytes = send(ClientSocket, RecvBuffer, sizeof(RecvBuffer), 0);
+//
 //        cout << "수신 ID : " << ClientSocket << endl;
 //        cout << "수신 메시지 : " << Utf8ToMultiByte(strCONTENTS) << endl;
 //    }
+//
+//
+//
 //    EnterCriticalSection(&ServerCS);
 //    userlist.erase(find(userlist.begin(), userlist.end(), LogoutSocket));
 //    closesocket(ClientSocket);
@@ -173,7 +191,7 @@
 //    // sql 연결
 //    driver = get_driver_instance();
 //    con = driver->connect(server, username, password);
-//    con->setSchema("chatting");
+//    con->setSchema("server");
 //    cout << "데이터베이스 접속성공!" << endl;
 //
 //    bool bProgramRunning = true;
@@ -216,6 +234,9 @@
 //            HANDLE ThreadHandle = (HANDLE)_beginthreadex(nullptr, 0, Chatting, (void*)&ClientSocket, 0, nullptr);
 //        }
 //    }
+//
+//   
+//
 //    closesocket(ServerSocket);
 //    DeleteCriticalSection(&ServerCS);
 //
