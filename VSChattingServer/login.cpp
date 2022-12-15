@@ -161,19 +161,19 @@ unsigned WINAPI Chatting(void* arg)
 				pstmt = con->prepareStatement("select * from memberinpo where memberid = ? and memberpwd = ?");
 				pstmt->setString(1, sID);
 				pstmt->setString(2, sPWD);
-				pstmt->execute();
+				
 
 				sql::ResultSet* RS = pstmt->executeQuery();
 
 				if (RS->rowsCount() > 0)
 				{
 					cout << "성공" << endl;
-					send(ClientSocket, "a", 1, 0);
+					send(ClientSocket, "1", 1, 0);
 				}
 				else
 				{
 					cout << "실패" << endl;
-			
+					send(ClientSocket, "2", 1, 0);
 				}
 				memcpy(&RecvID, Initial_Array, PACKET_SIZE);
 				memcpy(&RecvPWD, Initial_Array, PACKET_SIZE);
@@ -181,12 +181,38 @@ unsigned WINAPI Chatting(void* arg)
 
 			if (sID[0] == '1')
 			{
-				cout << "1번 탐??";
+				
 				sID.erase(sID.begin());
-				pstmt = con->prepareStatement("insert into memberinpo (MemberID,MemberPWD) values(?,?)");
+				pstmt = con->prepareStatement("select * from memberinpo where memberid = ?");
 				pstmt->setString(1, sID);
-				pstmt->setString(2, sPWD);
 				pstmt->execute();
+				sql::ResultSet* RS = pstmt->executeQuery();
+				if (RS->rowsCount() > 0)
+				{
+
+
+					
+					cout << "중복된 아이디입니다" << endl;
+					send(ClientSocket, "3", 1, 0);
+					
+				}
+				else
+				{
+					send(ClientSocket, "4", 1, 0);
+					cout << "가입 되었습니다" << endl;
+					pstmt = con->prepareStatement("insert into memberinpo (MemberID,MemberPWD) values(?,?)");
+					pstmt->setString(1, sID);
+					pstmt->setString(2, sPWD);
+					pstmt->execute();
+
+				}
+
+
+				
+
+
+				
+
 				memcpy(&RecvID, Initial_Array, PACKET_SIZE);
 				memcpy(&RecvPWD, Initial_Array, PACKET_SIZE);
 			}
