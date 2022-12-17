@@ -23,6 +23,8 @@ using namespace std;
 #define PACKET_SIZE 100
 #define PACKET_ID 20
 #define PACKET_PWD 25
+
+
 //
 
 //
@@ -115,6 +117,9 @@ std::string MultiByteToUtf8(std::string multibyte_str)
 	return resultString;
 }
 
+
+
+
 unsigned WINAPI Chatting(void* arg)
 {
 
@@ -161,7 +166,7 @@ unsigned WINAPI Chatting(void* arg)
 				pstmt = con->prepareStatement("select * from memberinpo where memberid = ? and memberpwd = ?");
 				pstmt->setString(1, sID);
 				pstmt->setString(2, sPWD);
-				
+				pstmt->execute();
 
 				sql::ResultSet* RS = pstmt->executeQuery();
 
@@ -190,8 +195,6 @@ unsigned WINAPI Chatting(void* arg)
 				if (RS->rowsCount() > 0)
 				{
 
-
-					
 					cout << "중복된 아이디입니다" << endl;
 					send(ClientSocket, "3", 1, 0);
 					
@@ -208,17 +211,11 @@ unsigned WINAPI Chatting(void* arg)
 				}
 
 
-				
-
-
-				
 
 				memcpy(&RecvID, Initial_Array, PACKET_SIZE);
 				memcpy(&RecvPWD, Initial_Array, PACKET_SIZE);
 			}
 
-			
-		
 			
 		}
 
@@ -251,12 +248,12 @@ unsigned WINAPI Chatting(void* arg)
 		string UserName = RecvNameBuffer;
 
 		
-		if (strCONTENTS == "EXITSERVER")
-		{
-			// 수신 메시지 EXITSERVER 일때 종료
-			bProgramRunning = false;
-			break;
-		}
+		//if (strCONTENTS == "EXITSERVER")
+		//{
+		//	// 수신 메시지 EXITSERVER 일때 종료
+		//	bProgramRunning = false;
+		//	break;
+		//}
 
 		
 	}
