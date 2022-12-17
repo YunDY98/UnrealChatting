@@ -19,7 +19,7 @@ using namespace std;
 #pragma comment (lib, "debug/mysqlcppconn.lib")
 //
 #define SERVER_IPV4 "0.0.0.0"
-#define SERVER_PORT 4949
+#define SERVER_PORT 5959
 #define PACKET_SIZE 100
 #define PACKET_ID 20
 #define PACKET_PWD 25
@@ -150,12 +150,12 @@ unsigned WINAPI Chatting(void* arg)
 		
 		string sID = RecvID;
 		char ID_Buffer[100];
-		memcpy(ID_Buffer, &sID, 100);
+		//memcpy(ID_Buffer, &sID, 100);
 		string sPWD = RecvPWD;
 		//cout << "ID : " << sID << endl;
-		cout << "ID : " << (int)ID_Buffer[0] << endl;
+		//cout << "ID : " << (int)ID_Buffer[0] << endl;
 
-		char test[33] = { 0 ,};
+		//char test[33] = { 0 ,};
 
 		if (RecvIDBytes > 0 && RecvPWDBytes > 0) 
 		{
@@ -180,8 +180,10 @@ unsigned WINAPI Chatting(void* arg)
 					cout << "½ÇÆÐ" << endl;
 					send(ClientSocket, "2", 1, 0);
 				}
-				memcpy(&RecvID, Initial_Array, PACKET_SIZE);
-				memcpy(&RecvPWD, Initial_Array, PACKET_SIZE);
+				/*memcpy(&RecvID, Initial_Array, PACKET_SIZE);
+				memcpy(&RecvPWD, Initial_Array, PACKET_SIZE);*/
+				memset(RecvID, NULL, PACKET_SIZE);
+				memset(RecvPWD, NULL, PACKET_SIZE);
 			}
 
 			if (sID[0] == '1')
@@ -211,9 +213,10 @@ unsigned WINAPI Chatting(void* arg)
 				}
 
 
-
-				memcpy(&RecvID, Initial_Array, PACKET_SIZE);
-				memcpy(&RecvPWD, Initial_Array, PACKET_SIZE);
+				memset(RecvID, NULL, PACKET_SIZE);
+				memset(RecvPWD, NULL, PACKET_SIZE);
+				/*memcpy(&RecvID, Initial_Array, PACKET_SIZE);
+				memcpy(&RecvPWD, Initial_Array, PACKET_SIZE);*/
 			}
 
 			
