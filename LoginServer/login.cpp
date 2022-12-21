@@ -117,9 +117,6 @@ std::string MultiByteToUtf8(std::string multibyte_str)
 	return resultString;
 }
 
-
-
-
 unsigned WINAPI Chatting(void* arg)
 {
 
