@@ -4,6 +4,12 @@
  # Created by https://www.toptal.com/developers/gitignore/api/unrealengine,visualstudio,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=unrealengine,visualstudio,windows
 
+# Remove Resource directory
+/Content/SimplyChat
+
+
+
+
 ### UnrealEngine ###
 # Visual Studio 2015 user specific files
 .vs/
